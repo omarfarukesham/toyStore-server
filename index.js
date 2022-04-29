@@ -30,6 +30,12 @@ async function run() {
             const result = await cursor.toArray()
             res.send(result)
         })
+        app.get('/products/:id', async(req, res)=>{
+            const id = req.params.id
+            const query = {_id: ObjectId(id)}
+            const result = await userCollection.findOne(query)
+            res.send(result)
+        })
 
         // sales growth data usages api here.......................................
         app.get('/sales', async(req, res)=>{

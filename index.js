@@ -14,17 +14,27 @@ app.use(express.json())
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.sow4u.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+//https://serene-headland-23680.herokuapp.com/products
 
 // function for all rest api code here..............................................
 async function run() {
     try {
         await client.connect(); 
         const userCollection = client.db('kidsStore').collection('products')
+        const salesCollection = client.db('kidsStore').collection('sales')
 
         //get products REST API code here ..........................................
         app.get('/products', async(req, res)=>{
             const query = {}
             const cursor = userCollection.find(query)
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+
+        // sales growth data usages api here.......................................
+        app.get('/sales', async(req, res)=>{
+            const query = {}
+            const cursor = salesCollection.find(query)
             const result = await cursor.toArray()
             res.send(result)
         })

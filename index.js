@@ -46,7 +46,7 @@ async function run() {
             res.send(result)
         })
 
-        // //to get user id from url ................
+        //to get user id from url ................
         // app.get('/user/:id', async(req, res) => {
         //     const id = req.params.id;
         //     const query = {_id: ObjectId(id)}
@@ -56,7 +56,7 @@ async function run() {
 
 
         // //get data from client side and send it to mongodb
-        // app.post('/user', async(req, res)=>{
+        // app.post('/product', async(req, res)=>{
         //     const newUser = req.body;
         //     const result = await userCollection.insertOne(newUser)
         //     res.send(result)
@@ -64,23 +64,20 @@ async function run() {
 
 
         // //user update api code here 
-        // app.put('/user/:id', async(req, res)=>{
-        //     const id = req.params.id
-        //     const updateUser = req.body;
-        //     const filter = {_id:ObjectId(id)}
-        //     const options = {upsert:true}
-        //     const upDateDoc = {
-        //         $set:{
-        //             name:updateUser.name,
-        //             email:updateUser.email,
-        //             job:updateUser.job,
-        //             duration:updateUser.duration,
-        //         }
-        //     }
+        app.put('/update/:id', async(req, res)=>{
+            const id = req.params.id
+            const updateStock = req.body;
+            const filter = {_id:ObjectId(id)}
+            const options = {upsert:true}
+            const upDateDoc = {
+                $set:{
+                    quantity:updateStock.quantity,
+                }
+            }
 
-        //     const result = await userCollection.updateOne(filter,upDateDoc,options)
-        //     res.send(result)
-        // })
+            const result = await userCollection.updateOne(filter,upDateDoc,options)
+            res.send(result)
+        })
 
         // //delete from database and client side 
         // app.delete('/user/:id', async(req, res)=>{

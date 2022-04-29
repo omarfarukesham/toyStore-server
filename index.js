@@ -6,6 +6,7 @@ require('dotenv').config()
 const port = process.env.PORT || 5000;
 
 
+
 // two significant middleware here ..............................................
 app.use(cors())
 app.use(express.json())
@@ -13,7 +14,7 @@ app.use(express.json())
 //Mongodb connection code here ....................................................
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.sow4u.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-
+ console.log(uri);
 //https://serene-headland-23680.herokuapp.com/products
 
 // function for all rest api code here..............................................
@@ -88,6 +89,7 @@ async function run() {
         //     const result = await userCollection.deleteOne(query);
         //     res.send(result)
         // })
+        console.log('all api is running');
     }
     finally { }
 }

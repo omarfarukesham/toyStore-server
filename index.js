@@ -55,12 +55,13 @@ async function run() {
         //   })
 
 
-        // //get data from client side and send it to mongodb
-        // app.post('/product', async(req, res)=>{
-        //     const newUser = req.body;
-        //     const result = await userCollection.insertOne(newUser)
-        //     res.send(result)
-        // })
+        //get data from client side and send it to mongodb
+        app.post('/product', async(req, res)=>{
+            const newProduct = req.body;
+            // console.log(newProduct);
+            const result = await userCollection.insertOne(newProduct)
+            res.send(result)
+        })
 
 
         // //user update api code here 
@@ -78,14 +79,35 @@ async function run() {
             const result = await userCollection.updateOne(filter,upDateDoc,options)
             res.send(result)
         })
+        //updata all information about stock product
+        app.put('/updateAll/:id', async(req, res)=>{
+            const id = req.params.id
+            const updateStock = req.body;
+            const filter = {_id:ObjectId(id)}
+            const options = {upsert:true}
+            const upDateDoc = {
+                $set:{
+                    name:updateStock.name,
+                    quantity:updateStock.quantity,
+                    image:updateStock.image,
+                    supplier:updateStock.supplier,
+                    Description:updateStock.Description
+                }
+            }
 
-        // //delete from database and client side 
-        // app.delete('/user/:id', async(req, res)=>{
-        //     var id = req.params.id;
-        //     const query = {_id: ObjectId(id) };
-        //     const result = await userCollection.deleteOne(query);
-        //     res.send(result)
-        // })
+            const result = await userCollection.updateOne(filter,upDateDoc,options)
+            res.send(result)
+        })
+
+        //delete from database and client side 
+        app.delete('/product/:id', async(req, res)=>{
+            var id = req.params.id;
+            const query = {_id: ObjectId(id) };
+            const result = await userCollection.deleteOne(query);
+            res.send(result)
+        })
+
+
         console.log('all api is running');
     }
     finally { }

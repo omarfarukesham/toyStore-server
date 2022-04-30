@@ -23,6 +23,7 @@ async function run() {
         await client.connect(); 
         const userCollection = client.db('kidsStore').collection('products')
         const salesCollection = client.db('kidsStore').collection('sales')
+        const ordersCollection = client.db('kidsStore').collection('orders')
 
         //get products REST API code here ..........................................
         app.get('/products', async(req, res)=>{
@@ -62,7 +63,23 @@ async function run() {
             const result = await userCollection.insertOne(newProduct)
             res.send(result)
         })
+        //wishlist product added api .....................................
+        app.post('/order', async(req, res)=>{
+            const order = req.body;
+            // console.log(newProduct);
+            const result = await ordersCollection.insertOne(order)
+            res.send(result)
+        })
 
+        //wish list get data from mongodb to end user
+        app.get('/order', async(req, res)=>{
+            const email = req.query.email
+            // console.log(email)
+            const query = {userEmail: email}
+            const cursor = ordersCollection.find(query)
+            const result = await cursor.toArray()
+            res.send(result)
+        })
 
         // //user update api code here 
         app.put('/update/:id', async(req, res)=>{

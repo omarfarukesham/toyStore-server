@@ -123,6 +123,13 @@ async function run() {
             const result = await userCollection.deleteOne(query);
             res.send(result)
         })
+        //remove from database and client side of wishlist.....................
+        app.delete('/removeOrder/:id', async(req, res)=>{
+            var id = req.params.id;
+            const query = {_id: ObjectId(id) };
+            const result = await ordersCollection.deleteOne(query);
+            res.send(result)
+        })
 
 
         console.log('all api is running');

@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
  const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 require('dotenv').config()
 const port = process.env.PORT || 5000;
@@ -25,6 +26,16 @@ async function run() {
         const salesCollection = client.db('kidsStore').collection('sales')
         const ordersCollection = client.db('kidsStore').collection('orders')
 
+
+        //login jwt server access token api here...................................
+        app.post('/login', async(req, res)=>{
+            const email = req.body;
+            console.log(email);
+            const token = jwt.sign(email, process.env.ACCESS_TOKEN_KEY);
+            res.send({ token })
+           
+        })
+     
         //get products REST API code here ..........................................
         app.get('/products', async(req, res)=>{
             const query = {}
@@ -59,9 +70,20 @@ async function run() {
         //get data from client side and send it to mongodb
         app.post('/product', async(req, res)=>{
             const newProduct = req.body;
-            // console.log(newProduct);
-            const result = await userCollection.insertOne(newProduct)
-            res.send(result)
+            const tokenInfo = req.headers.authorization;
+            // console.log(tokenInfo)
+            const [email, accessToken] = tokenInfo.split(" ")
+             console.log(email, accessToken)
+
+            const decoded = verifyToken(accessToken)
+            if(email===decoded.email){
+                const result = await userCollection.insertOne(newProduct)
+                res.send(result)
+            }else{
+                res.send({success :'Unauthorized Email........'})
+            }
+
+           
         })
         //wishlist product added api .....................................
         app.post('/order', async(req, res)=>{
@@ -150,3 +172,18 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log('ToyStore operation is running on the PORT::', port)
 })
+
+
+function verifyToken(token) {
+    let email;
+    jwt.verify(token, process.env.ACCESS_TOKEN_KEY, function (error, decoded) {
+        if (error) {
+            email = 'Invalid email'
+        }
+        if (decoded) {
+            console.log(decoded)
+            email = decoded
+        }
+    });
+    return email;
+}

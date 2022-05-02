@@ -40,7 +40,7 @@ async function run() {
         app.get('/products', async(req, res)=>{
             const query = {}
             const cursor = userCollection.find(query)
-            const result = await cursor.toArray()
+            const result = await cursor.limit(6).toArray()
             res.send(result)
         })
         app.get('/products/:id', async(req, res)=>{
@@ -50,6 +50,30 @@ async function run() {
             res.send(result)
         })
 
+         //product load api from mongodb ..................................
+         app.get('/product', async (req, res) => {
+            const query = {}
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+            const cursor = userCollection.find(query)
+
+            let products;
+            if(page || size){
+                products = await cursor.skip(page*size).limit(size).toArray()
+            }else{
+                 products = await cursor.toArray()
+            }
+           
+            res.send(products)
+        })
+
+        //server data counting api .......................................
+        app.get('/productCount', async(req, res)=>{
+            const count = await userCollection.estimatedDocumentCount()
+            res.send({count})
+        })
+
+        
         // sales growth data usages api here.......................................
         app.get('/sales', async(req, res)=>{
             const query = {}

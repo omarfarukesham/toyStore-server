@@ -73,7 +73,7 @@ async function run() {
             res.send({count})
         })
 
-        
+
         // sales growth data usages api here.......................................
         app.get('/sales', async(req, res)=>{
             const query = {}

@@ -82,14 +82,6 @@ async function run() {
             res.send(result)
         })
 
-        //to get user id from url ................
-        // app.get('/user/:id', async(req, res) => {
-        //     const id = req.params.id;
-        //     const query = {_id: ObjectId(id)}
-        //     const result = await userCollection.findOne(query)
-        //     res.send(result)
-        //   })
-
 
         //get data from client side and send it to mongodb
         app.post('/product', async(req, res)=>{
@@ -117,10 +109,9 @@ async function run() {
             res.send(result)
         })
 
-        //wish list get data from mongodb to end user
+        //wish list get data from mongodb to end user..................
         app.get('/order', async(req, res)=>{
             const email = req.query.email
-            // console.log(email)
             const query = {userEmail: email}
             const cursor = ordersCollection.find(query)
             const result = await cursor.toArray()
@@ -142,7 +133,9 @@ async function run() {
             const result = await userCollection.updateOne(filter,upDateDoc,options)
             res.send(result)
         })
-        //updata all information about stock product
+
+
+        //updata all information about stock product............................
         app.put('/updateAll/:id', async(req, res)=>{
             const id = req.params.id
             const updateStock = req.body;
@@ -162,7 +155,7 @@ async function run() {
             res.send(result)
         })
 
-        //delete from database and client side 
+        //delete from database and client side ..................................
         app.delete('/product/:id', async(req, res)=>{
             var id = req.params.id;
             const query = {_id: ObjectId(id) };
@@ -194,10 +187,10 @@ app.get('/', (req, res) => {
 
 //port listen to server.............................................................
 app.listen(port, () => {
-    console.log('ToyStore operation is running on the PORT::', port)
+    console.log('ToyStore Server running on the PORT::', port)
 })
 
-
+// verify function for jwt.........................................................
 function verifyToken(token) {
     let email;
     jwt.verify(token, process.env.ACCESS_TOKEN_KEY, function (error, decoded) {

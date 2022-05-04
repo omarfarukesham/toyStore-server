@@ -15,8 +15,7 @@ app.use(express.json())
 //Mongodb connection code here ....................................................
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.sow4u.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
- console.log(uri);
-//https://serene-headland-23680.herokuapp.com/products
+
 
 // function for all rest api code here..............................................
 async function run() {
@@ -130,12 +129,12 @@ async function run() {
                 }
             }
 
-            const result = await userCollection.updateOne(filter,upDateDoc,options)
-            res.send(result)
+            const results = await userCollection.updateOne(filter,upDateDoc,options)
+            res.send(results)
         })
 
 
-        //updata all information about stock product............................
+        //update all information about stock product............................
         app.put('/updateAll/:id', async(req, res)=>{
             const id = req.params.id
             const updateStock = req.body;
@@ -171,7 +170,7 @@ async function run() {
         })
 
 
-        console.log('all api is running');
+        console.log('all api is running perfectly');
     }
     finally { }
 }

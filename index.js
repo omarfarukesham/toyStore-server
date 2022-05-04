@@ -3,8 +3,8 @@ const app = express();
  const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
  const jwt = require('jsonwebtoken');
 const cors = require('cors');
-require('dotenv').config()
-const port = process.env.PORT || 5000;
+require('dotenv').config();
+const port = process.env.PORT || 4000;
 
 
 
@@ -82,7 +82,7 @@ async function run() {
         })
 
 
-        //get data from client side and send it to mongodb
+        //get data from client side and send it to mongodb........................
         app.post('/product', async(req, res)=>{
             const newProduct = req.body;
             const tokenInfo = req.headers.authorization;
@@ -117,7 +117,7 @@ async function run() {
             res.send(result)
         })
 
-        // //user update api code here 
+     //user update api code here .......................................
         app.put('/update/:id', async(req, res)=>{
             const id = req.params.id
             const updateStock = req.body;
@@ -170,7 +170,7 @@ async function run() {
         })
 
 
-        console.log('all api is running perfectly');
+        //console.log('all api is running perfectly');
     }
     finally { }
 }
@@ -194,7 +194,7 @@ function verifyToken(token) {
     let email;
     jwt.verify(token, process.env.ACCESS_TOKEN_KEY, function (error, decoded) {
         if (error) {
-            email = 'Invalid email'
+            email = 'Invalid email Address'
         }
         if (decoded) {
             console.log(decoded)

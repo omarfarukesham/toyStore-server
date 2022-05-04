@@ -4,7 +4,7 @@ const app = express();
  const jwt = require('jsonwebtoken');
 const cors = require('cors');
 require('dotenv').config();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 
 
 
@@ -26,10 +26,9 @@ async function run() {
         const ordersCollection = client.db('kidsStore').collection('orders')
 
 
-        //login jwt server access token api here...................................
+        //login jwt server access token api here.................................
         app.post('/login', async(req, res)=>{
             const email = req.body;
-            console.log(email);
             const token = jwt.sign(email, process.env.ACCESS_TOKEN_KEY);
             res.send({ token })
            
@@ -161,6 +160,7 @@ async function run() {
             const result = await userCollection.deleteOne(query);
             res.send(result)
         })
+
         //remove from database and client side of wishlist.....................
         app.delete('/removeOrder/:id', async(req, res)=>{
             var id = req.params.id;
@@ -178,7 +178,7 @@ async function run() {
 run().catch(console.dir)
 
 
-//initial api......................................................................
+//initial api caller......................................................................
 app.get('/', (req, res) => {
     res.send('Node js is ready to work...........')
 })
@@ -196,8 +196,7 @@ function verifyToken(token) {
         if (error) {
             email = 'Invalid email Address'
         }
-        if (decoded) {
-            console.log(decoded)
+        if (decoded) {           
             email = decoded
         }
     });

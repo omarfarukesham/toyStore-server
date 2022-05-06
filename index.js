@@ -24,6 +24,7 @@ async function run() {
         const userCollection = client.db('kidsStore').collection('products')
         const salesCollection = client.db('kidsStore').collection('sales')
         const ordersCollection = client.db('kidsStore').collection('orders')
+        const feedbackCollection = client.db('kidsStore').collection('feedbacks')
 
 
         //login jwt server access token api here.................................
@@ -116,6 +117,21 @@ async function run() {
             res.send(result)
         })
 
+        // feedback rest api to insert data into database....................
+        app.post('/feedback', async(req, res)=>{
+            const feeds = req.body
+            // console.log(feeds)
+            const results = await feedbackCollection.insertOne(feeds)
+            res.send(results)
+        })
+
+        //get feedback for showing client side...............................
+        app.get('/readFeedback', async(req, res)=>{
+            const query = {}
+            const cursor = feedbackCollection.find(query)
+            const result = await cursor.toArray()
+            res.send(result)
+        })
      //user update api code here .......................................
         app.put('/update/:id', async(req, res)=>{
             const id = req.params.id

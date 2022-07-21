@@ -25,6 +25,7 @@ async function run() {
         const salesCollection = client.db('kidsStore').collection('sales')
         const ordersCollection = client.db('kidsStore').collection('orders')
         const feedbackCollection = client.db('kidsStore').collection('feedbacks')
+        const dashboardCollection = client.db('kidsStore').collection('dashboard')
 
 
         //login jwt server access token api here.................................
@@ -46,6 +47,13 @@ async function run() {
             const id = req.params.id
             const query = {_id: ObjectId(id)}
             const result = await userCollection.findOne(query)
+            res.send(result)
+        })
+
+        app.get('/analysis', async (req, res) => {
+            const query = {}
+            const cursor = dashboardCollection.find(query)
+            const result = await cursor.toArray()
             res.send(result)
         })
 

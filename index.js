@@ -26,6 +26,8 @@ async function run() {
         const ordersCollection = client.db('kidsStore').collection('orders')
         const feedbackCollection = client.db('kidsStore').collection('feedbacks')
         const dashboardCollection = client.db('kidsStore').collection('dashboard')
+        const userMasterCollection = client.db('kidsStore').collection('masterData')
+        const userAnalysisCollection = client.db('kidsStore').collection('masterAnalysis')
 
 
         //login jwt server access token api here.................................
@@ -50,6 +52,59 @@ async function run() {
             res.send(result)
         })
 
+        //user-dashboard assingment data retrive rest api
+
+        app.get('/master', async(req, res)=>{
+            const query = {}
+            const cursor = userMasterCollection.find(query)
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+        app.post('/master', async(req, res)=>{
+            const user = req.body;
+            // console.log(newProduct);
+            const result = await userMasterCollection.insertOne(user)
+            res.send(result)
+        })
+        app.get('/masterAnalysis', async(req, res)=>{
+            const query = {}
+            const cursor = userAnalysisCollection.find(query)
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+
+        app.delete('/removeMaster/:id', async(req, res)=>{
+            var id = req.params.id;
+            const query = {_id: ObjectId(id) };
+            const result = await userMasterCollection.deleteOne(query);
+            res.send(result)
+        })
+
+        //update all information about stock product............................
+        app.put('/updateMaster/:id', async(req, res)=>{
+            const id = req.params.id
+            const updateStock = req.body;
+            const filter = {_id:ObjectId(id)}
+            const options = {upsert:true}
+            const upDateDoc = {
+                $set:{
+                    Nmae:updateStock.Nmae,
+                    Country:updateStock.Country,
+                    img:updateStock.img,
+                    gender:updateStock.gender,
+                    Device:updateStock.Device,
+                    Profession:updateStock.Profession,
+                    dailyUse:updateStock.dailyUse,
+                    Invest:updateStock.Invest,
+                }
+              
+            }
+
+            const result = await userMasterCollection.updateOne(filter,upDateDoc,options)
+            res.send(result)
+        })
+
+        
         app.get('/analysis', async (req, res) => {
             const query = {}
             const cursor = dashboardCollection.find(query)
